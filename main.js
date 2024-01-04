@@ -10,6 +10,7 @@ for (let i = 1; i <= 5; i++) {
     fs.mkdir(path.join(mainPath, `data_${i}`), () => {})
     fs.writeFile(path.join(mainPath, `file_${i}`), `this is text for file${i}`, () => {})
 }
+
 fs.readdir(mainPath, (err, files)=>{
     if (err) throw err;
 
