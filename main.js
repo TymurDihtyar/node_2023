@@ -11,20 +11,17 @@ for (let i = 1; i <= 5; i++) {
     fs.writeFile(path.join(mainPath, `file_${i}`), `this is text for file${i}`, () => {})
 }
 
-fs.readdir(mainPath, (err, files)=>{
-    if (err) throw err;
-
-    files.forEach(item => {
-        const itemPath = path.join(mainPath, item)
-        fs.stat(itemPath, (err, stats)=>{
-            if (stats.isDirectory()) {
-                console.log(`Directory: ${path.basename(itemPath)}`);
-            } else if (stats.isFile()) {
-                console.log(`FILE: ${path.basename(itemPath)}`);
-            }
-        })
+fs.readdirSync(mainPath).forEach(item => {
+    const itemPath = path.join(mainPath, item)
+    fs.stat(itemPath, (err, stats) => {
+        if (stats.isDirectory()) {
+            console.log(`Directory: ${path.basename(itemPath)}`);
+        } else if (stats.isFile()) {
+            console.log(`FILE: ${path.basename(itemPath)}`);
+        }
     })
 })
+
 
 // fs.mkdir(mainPath, (err) => {
 //     if (err) throw err;
