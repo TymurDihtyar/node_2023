@@ -3,7 +3,7 @@ const fs = require('fs')
 const mainPath = path.join(__dirname, 'files')
 
 fs.mkdir(mainPath, (err) => {
-    if (err) throw new  Error();
+    if (err) throw err;
 })
 
 for (let i = 1; i <= 5; i++) {
@@ -11,7 +11,7 @@ for (let i = 1; i <= 5; i++) {
     fs.writeFile(path.join(mainPath, `file_${i}`), `this is text for file${i}`, () => {})
 }
 fs.readdir(mainPath, (err, files)=>{
-    if (err) throw new  Error();
+    if (err) throw err;
 
     files.forEach(item => {
         const itemPath = path.join(mainPath, item)
