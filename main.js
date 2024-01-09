@@ -46,7 +46,7 @@ app.get('/users/:userId', (req, res) => {
 app.post('/users', (req, res) => {
     const newData = req.body;
 
-    if (newData.name.length > 3 && newData.age > 0) {
+    if (newData.name.length >= 3 && newData.age > 0) {
         users.push(newData)
         fs.writeFile(mainPath, JSON.stringify(users), (err) => {
             if (err) {
@@ -56,7 +56,7 @@ app.post('/users', (req, res) => {
             res.send('User Add to file')
         })
     } else {
-        res.status(400).send('User name must be > 3 letters and age must be > 0')
+        res.status(400).send('User name must have > 3 letters and age must be > 0')
     }
 })
 
