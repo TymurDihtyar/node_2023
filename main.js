@@ -34,8 +34,8 @@ app.get('/users/:userId', (req, res) => {
     const {userId} = req.params;
 
     const userIndex = users.findIndex((user) => user.id === +userId);
-    console.log(userIndex);
-    if (userIndex > 0) {
+
+    if (userIndex >= 0) {
         res.json(users[userIndex])
     } else {
         res.send('no User with this id')
@@ -85,23 +85,27 @@ app.put('/users/:userId', (req, res) => {
     const {userId} = req.params;
     const newData = req.body;
 
-    const userIndex = users.findIndex((user) => user.id === +userId);
+    if (newData.name.length >= 3 && newData.age > 0) {
 
-    if (userIndex > 0) {
-        users[userIndex] = newData
+        const userIndex = users.findIndex((user) => user.id === +userId);
 
-        fs.writeFile(mainPath, JSON.stringify(users), (err) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send('Problem with server file')
-            } else {
-                res.status(200).send('User replace')
-            }
-        })
+        if (userIndex > 0) {
+            users[userIndex] = newData
+
+            fs.writeFile(mainPath, JSON.stringify(users), (err) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send('Problem with server file')
+                } else {
+                    res.status(200).send('User replace')
+                }
+            })
+        } else {
+            res.status(400).send('User is not found')
+        }
     } else {
-        res.status(400).send('User is not found')
+        res.status(400).send('User name must have > 3 letters and age must be > 0')
     }
-
 })
 
 app.listen(port, () => {
