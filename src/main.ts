@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 
 import { read, write } from "./fs.service";
 
@@ -8,7 +8,7 @@ const port = 3001;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get("/users", async (req, res) => {
+app.get("/users", async (req: Request, res: Response) => {
   try {
     const users = await read();
     res.status(200).json(users);
@@ -17,7 +17,7 @@ app.get("/users", async (req, res) => {
   }
 });
 
-app.get("/users/:id", async (req, res) => {
+app.get("/users/:id", async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
     if (!Number.isInteger(id)) {
@@ -35,7 +35,7 @@ app.get("/users/:id", async (req, res) => {
   }
 });
 
-app.post("/users", async (req, res) => {
+app.post("/users", async (req: Request, res: Response) => {
   try {
     const { name, age, email } = req.body;
     if (!age || !Number.isInteger(age) || age < 0 || age > 100) {
@@ -59,7 +59,7 @@ app.post("/users", async (req, res) => {
   }
 });
 
-app.delete("/users/:id", async (req, res) => {
+app.delete("/users/:id", async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
 
@@ -80,7 +80,7 @@ app.delete("/users/:id", async (req, res) => {
   }
 });
 
-app.put("/users/:id", async (req, res) => {
+app.put("/users/:id", async (req: Request, res: Response) => {
   try {
     const id = Number(req.params.id);
     const { name, age, email } = req.body;
