@@ -1,5 +1,5 @@
-const express = require('express');
-const {read, write} = require('./fs.service')
+import express from 'express'
+import {read, write} from './fs.service'
 
 const app = express();
 const port = 3000;
