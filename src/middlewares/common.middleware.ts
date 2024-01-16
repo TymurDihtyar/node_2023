@@ -1,12 +1,14 @@
 import { NextFunction, Request, Response } from "express";
 
+import { ApiError } from "../errors/api.error";
+
 class CommonMiddleware {
   public isValidId(req: Request, res: Response, next: NextFunction) {
     try {
       const id = Number(req.params.id);
 
       if (!Number.isInteger(id)) {
-        throw new Error("wrong ID param");
+        throw new ApiError("wrong ID param", 400);
       }
       next();
     } catch (e) {
@@ -19,13 +21,13 @@ class CommonMiddleware {
       const { name, age, email } = req.body;
 
       if (!age || Number.isInteger(age) || +age < 0 || +age > 100) {
-        throw new Error("wrong age");
+        throw new ApiError("wrong age", 400);
       }
       if (!email || !email.includes("@")) {
-        throw new Error("wrong email");
+        throw new ApiError("wrong email", 400);
       }
       if (!name || name.length <= 3) {
-        throw new Error("wrong name");
+        throw new ApiError("wrong name", 400);
       }
       next();
     } catch (e) {
