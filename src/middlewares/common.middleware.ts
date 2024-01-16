@@ -17,7 +17,8 @@ class CommonMiddleware {
   public isValidUser(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, age, email } = req.body;
-      if (!age || !Number.isInteger(age) || age < 0 || age > 100) {
+
+      if (!age || Number.isInteger(age) || +age < 0 || +age > 100) {
         throw new Error("wrong age");
       }
       if (!email || !email.includes("@")) {

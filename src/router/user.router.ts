@@ -13,6 +13,6 @@ router.post("/", commonMiddleware.isValidUser, userController.create);
 
 router.delete("/:id", commonMiddleware.isValidId, userController.delete);
 
-router.put("/:id", userController.update);
+router.put("/:id", commonMiddleware.isValidId, commonMiddleware.isValidUser, userController.update);
 
 export const userRouter = router;

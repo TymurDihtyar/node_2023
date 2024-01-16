@@ -1,5 +1,5 @@
-import { read, write } from "../fs.service";
 import { IUser } from "../interface/user.interface";
+import { read, write } from "../service/fs.service";
 
 class UserRepository {
   public async getAll(): Promise<IUser[]> {
