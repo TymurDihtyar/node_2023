@@ -39,17 +39,7 @@ class UserController {
     try {
       const id = Number(req.params.id);
 
-      if (!Number.isInteger(id)) {
-        throw new Error("wrong ID param");
-      }
-
-      const users = await read();
-      const index = users.findIndex((user) => user.id === id);
-      if (index === -1) {
-        throw new Error("user not found");
-      }
-      users.splice(index, 1);
-      await write(users);
+      await userService.delete(id);
       return res.status(204).json("User deleted");
     } catch (e) {
       res.status(400).json(e.message);

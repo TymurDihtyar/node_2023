@@ -11,7 +11,7 @@ router.get("/:id", commonMiddleware.isValidId, userController.getById);
 
 router.post("/", commonMiddleware.isValidUser, userController.create);
 
-router.delete("/:id", userController.delete);
+router.delete("/:id", commonMiddleware.isValidId, userController.delete);
 
 router.put("/:id", userController.update);
 

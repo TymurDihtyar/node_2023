@@ -23,5 +23,15 @@ class UserService {
     await userRepository.write(users);
     return newUser;
   }
+
+  public async delete(id): Promise<void> {
+    const users = await userRepository.getAll();
+    const index = users.findIndex((user) => user.id === id);
+    if (index === -1) {
+      throw new Error("user not found");
+    }
+    users.splice(index, 1);
+    await userRepository.write(users);
+  }
 }
 export const userService = new UserService();

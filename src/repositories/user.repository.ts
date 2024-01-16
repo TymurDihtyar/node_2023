@@ -1,4 +1,4 @@
-import {read, write} from "../fs.service";
+import { read, write } from "../fs.service";
 import { IUser } from "../interface/user.interface";
 
 class UserRepository {
