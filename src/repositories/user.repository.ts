@@ -1,14 +1,17 @@
 import { IUser } from "../interface/user.interface";
-import { read, write } from "../service/fs.service";
+import { User } from "../models/user.model";
 
 class UserRepository {
   public async getAll(): Promise<IUser[]> {
-    const users = await read();
-    return users;
+    return await User.find({});
   }
 
-  public async write(users): Promise<void> {
-    await write(users);
+  public async getById(id: string): Promise<IUser> {
+    return await User.findOne({ _id: id });
+  }
+
+  public async singUp(body: Partial<IUser>): Promise<IUser> {
+    return await User.create(body);
   }
 }
 
