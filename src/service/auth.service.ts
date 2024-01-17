@@ -5,6 +5,7 @@ import { IUser } from "../interface/user.interface";
 import { userRepository } from "../repositories/user.repository";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
+import { tokenRepository } from "../repositories/token.repository";
 
 class AuthService {
   public async singUp(dto: Partial<IUser>): Promise<IUser> {
@@ -20,6 +21,7 @@ class AuthService {
     if (!isMatch) throw new ApiError("Not valid email of password", 401);
 
     const jwtTokens = tokenService.generateTokenPair({ userId: user._id });
+    await tokenRepository.create({ ...jwtTokens, _userId: user._id });
 
     return jwtTokens;
   }
