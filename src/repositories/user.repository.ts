@@ -1,3 +1,5 @@
+import { FilterQuery } from "mongoose";
+
 import { IUser } from "../interface/user.interface";
 import { User } from "../models/user.model";
 
@@ -10,7 +12,11 @@ class UserRepository {
     return await User.findOne({ _id: id });
   }
 
-  public async singUp(body: Partial<IUser>): Promise<IUser> {
+  public async getOneByParams(params: FilterQuery<IUser>): Promise<IUser> {
+    return await User.findOne(params);
+  }
+
+  public async create(body: Partial<IUser>): Promise<IUser> {
     return await User.create(body);
   }
 

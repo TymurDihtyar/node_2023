@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 
-import { IUser } from "../interface/user.interface";
 import { userService } from "../service/user.service";
 
 class UserController {
@@ -19,17 +18,6 @@ class UserController {
       const user = await userService.getById(id);
 
       return res.json(user);
-    } catch (e) {
-      next(e);
-    }
-  }
-
-  public async singUp(req: Request, res: Response, next: NextFunction) {
-    try {
-      const body = req.body as Partial<IUser>;
-      const newUser = await userService.singUp(body);
-
-      return res.json(newUser);
     } catch (e) {
       next(e);
     }

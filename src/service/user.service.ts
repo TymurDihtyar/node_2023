@@ -15,10 +15,6 @@ class UserService {
     return user;
   }
 
-  public async singUp(body: Partial<IUser>): Promise<IUser> {
-    return await userRepository.singUp(body);
-  }
-
   public async deleteById(id: string): Promise<void> {
     const user = await userRepository.getById(id);
     if (!user) {
