@@ -10,7 +10,7 @@ class UserService {
   public async getById(id: string): Promise<IUser> {
     const user = await userRepository.getById(id);
     if (!user) {
-      throw new ApiError("user not found", 422);
+      throw new ApiError("user not found", 404);
     }
     return user;
   }
@@ -19,30 +19,20 @@ class UserService {
     return await userRepository.singUp(body);
   }
 
-  // public async delete(id): Promise<IUser> {
-  //   const users = await userRepository.getAll();
-  //   const index = users.findIndex((user) => user.id === id);
-  //   if (index === -1) {
-  //     throw new ApiError("user not found", 422);
-  //   }
-  //   const delUser = users.splice(index, 1);
-  //   await userRepository.write(users);
-  //   return delUser[0];
-  // }
-  //
-  // public async put(id, name, age, email): Promise<IUser[]> {
-  //   const users = await userRepository.getAll();
-  //
-  //   const user = users.find((user) => user.id === id);
-  //   if (!user) {
-  //     throw new ApiError("user not found", 422);
-  //   }
-  //   user.name = name;
-  //   user.age = age;
-  //   user.email = email;
-  //
-  //   await userRepository.write(users);
-  //   return users;
-  // }
+  public async deleteById(id: string): Promise<void> {
+    const user = await userRepository.getById(id);
+    if (!user) {
+      throw new ApiError("user not found", 404);
+    }
+    await userRepository.deleteById(id);
+  }
+
+  public async updateById(id: string, body: Partial<IUser>): Promise<IUser> {
+    const user = await userRepository.getById(id);
+    if (!user) {
+      throw new ApiError("user not found", 422);
+    }
+    return await userRepository.updateById(id, body);
+  }
 }
 export const userService = new UserService();
