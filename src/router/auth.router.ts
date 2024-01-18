@@ -8,4 +8,6 @@ router.post("/sign-up", authController.singUp);
 
 router.post("/sign-in", authController.singIn);
 
+router.post("/refresh", authController.refresh);
+
 export const authRouter = router;

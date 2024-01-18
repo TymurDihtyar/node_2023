@@ -11,4 +11,5 @@ export interface ITokenPair {
 
 export interface IToken extends ITokenPair {
   _userId: Types.ObjectId;
+  _id: Types.ObjectId;
 }
