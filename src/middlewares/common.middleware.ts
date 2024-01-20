@@ -16,25 +16,6 @@ class CommonMiddleware {
       next(e);
     }
   }
-
-  public isValidUser(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { name, age, email } = req.body;
-
-      if (!age || !Number.isInteger(age) || +age < 0 || +age > 100) {
-        throw new ApiError("wrong age", 400);
-      }
-      if (!email || !email.includes("@")) {
-        throw new ApiError("wrong email", 400);
-      }
-      if (!name || name.length <= 3) {
-        throw new ApiError("wrong name", 400);
-      }
-      next();
-    } catch (e) {
-      next(e);
-    }
-  }
 }
 
 export const commonMiddleware = new CommonMiddleware();

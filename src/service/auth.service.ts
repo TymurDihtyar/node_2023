@@ -1,6 +1,8 @@
+import { Types } from "mongoose";
+
 import { ApiError } from "../errors/api.error";
 import { ILogin } from "../interface/auth.interface";
-import { ITokenPair } from "../interface/token.interface";
+import { ITokenPair, ITokenPayload } from "../interface/token.interface";
 import { IUser } from "../interface/user.interface";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
@@ -26,24 +28,21 @@ class AuthService {
     return jwtTokens;
   }
 
-  public async refresh(dto: Partial<ITokenPair>): Promise<ITokenPair> {
-    const tokens = await tokenRepository.getTokenByParams({
-      refreshToken: dto.refreshToken,
-    });
-
-    if (!tokens) throw new ApiError("Not tokens found", 401);
+  public async refresh(
+    jwtPayload: ITokenPayload,
+    refreshToken: string,
+  ): Promise<ITokenPair> {
+    await tokenRepository.deleteTokenByParams({ refreshToken });
 
     const jwtTokens = tokenService.generateTokenPair({
-      userId: tokens._userId,
+      userId: jwtPayload.userId,
     });
 
-    const result = await tokenRepository.update(
-      { ...jwtTokens, _userId: tokens._userId },
-      tokens._id,
-    );
-    console.log(result);
-
-    return result;
+    await tokenRepository.create({
+      ...jwtTokens,
+      _userId: new Types.ObjectId(jwtPayload.userId),
+    });
+    return jwtTokens;
   }
 }
 export const authService = new AuthService();
