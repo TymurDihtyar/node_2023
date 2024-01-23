@@ -1,17 +1,27 @@
 import { Types } from "mongoose";
 
+import { EEmailAction } from "../enums/email-action.enum";
 import { ApiError } from "../errors/api.error";
 import { ILogin } from "../interface/auth.interface";
 import { ITokenPair, ITokenPayload } from "../interface/token.interface";
 import { IUser } from "../interface/user.interface";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
+import { emailService } from "./email.service";
 import { passwordService } from "./password.service";
 import { tokenService } from "./token.service";
 
 class AuthService {
   public async singUp(dto: Partial<IUser>): Promise<IUser> {
+    const userFromDb = await userRepository.getOneByParams({
+      email: dto.email,
+    });
+    if (userFromDb) {
+      throw new ApiError("User with provided email already exist", 400);
+    }
     const hashedPassword = await passwordService.hash(dto.password);
+    await emailService.sendMail(dto.email, EEmailAction.WELCOME);
+
     return await userRepository.create({ ...dto, password: hashedPassword });
   }
 
