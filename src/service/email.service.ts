@@ -32,13 +32,17 @@ class EmailService {
     this.transporter.use("compile", hbs(hbsOptions));
   }
 
-  public async sendMail(email: string | string[], emailAction: EEmailAction) {
+  public async sendMail(
+    email: string | string[],
+    emailAction: EEmailAction,
+    context: Record<string, string | number> = {},
+  ) {
     const { subject, templateName } = emailTemplate[emailAction];
     const mailOptions = {
       to: email,
       subject,
       template: templateName,
-      context: { name: "Tymur" },
+      context,
     };
     await this.transporter.sendMail(mailOptions);
   }

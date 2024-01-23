@@ -20,7 +20,19 @@ class AuthService {
       throw new ApiError("User with provided email already exist", 400);
     }
     const hashedPassword = await passwordService.hash(dto.password);
-    await emailService.sendMail(dto.email, EEmailAction.WELCOME);
+
+    // const users = await userRepository.getAll();
+    // await Promise.all(
+    //   users.map(async (user) => {
+    //     await emailService.sendMail(user.email, EEmailAction.WELCOME, {
+    //       name: user.name,
+    //     });
+    //   }),
+    // );
+
+    await emailService.sendMail(dto.email, EEmailAction.WELCOME, {
+      name: dto.name,
+    });
 
     return await userRepository.create({ ...dto, password: hashedPassword });
   }
