@@ -7,11 +7,11 @@ import { ITokenPair, ITokenPayload } from "../interface/token.interface";
 class TokenService {
   public generateTokenPair(payload: ITokenPayload): ITokenPair {
     const accessToken = jwt.sign(payload, configs.JWT_ACCESS_SECRET, {
-      expiresIn: "20s",
+      expiresIn: configs.JWT_ACCESS_EXPIRES_IN,
     });
 
     const refreshToken = jwt.sign(payload, configs.JWT_REFRESH_SECRET, {
-      expiresIn: "1m",
+      expiresIn: configs.JWT_REFRESH_EXPIRES_IN,
     });
 
     return { accessToken, refreshToken };
@@ -29,7 +29,7 @@ class TokenService {
           secret = configs.JWT_REFRESH_SECRET;
           break;
       }
-      return jwt.verify(token, secret);
+      return jwt.verify(token, secret) as ITokenPayload;
     } catch (e) {
       throw new ApiError("Token not valid", 401);
     }
