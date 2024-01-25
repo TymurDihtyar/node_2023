@@ -24,10 +24,7 @@ class UserService {
     return user;
   }
 
-  public async updateMe(
-    jwtPayload: ITokenPayload,
-    body: Partial<IUser>,
-  ): Promise<IUser> {
+  public async updateMe(jwtPayload: ITokenPayload, body: Partial<IUser>): Promise<IUser> {
     const user = await userRepository.getById(jwtPayload.userId);
     if (!user) {
       throw new ApiError("user not found", 403);

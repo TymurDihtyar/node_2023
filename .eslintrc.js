@@ -12,3 +12,8 @@ module.exports = {
     "no-unused-vars": ["error", { argsIgnorePattern: "req|res|next" }],
   },
 };
+
+// "max" (default 300) enforces a maximum number of lines in a file
+// "skipBlankLines": true ignore lines made up purely of whitespace.
+// "skipComments": true ignore lines containing just comments
+// skipBlankLines": true
