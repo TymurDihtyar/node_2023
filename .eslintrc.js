@@ -7,13 +7,12 @@ module.exports = {
   plugins: ["@typescript-eslint", "simple-import-sort"],
   root: true,
   rules: {
-    "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": "error",
     "no-unused-vars": ["error", { argsIgnorePattern: "req|res|next" }],
   },
 };
 
-// "max" (default 300) enforces a maximum number of lines in a file
+//  "max"(default 300) enforces a maximum number of lines in a file
 // "skipBlankLines": true ignore lines made up purely of whitespace.
 // "skipComments": true ignore lines containing just comments
-// skipBlankLines": true
