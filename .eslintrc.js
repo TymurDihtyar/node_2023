@@ -10,6 +10,13 @@ module.exports = {
     "simple-import-sort/exports": "error",
     "simple-import-sort/imports": "error",
     "no-unused-vars": ["error", { argsIgnorePattern: "req|res|next" }],
+    "max-len": ["error", { code: 180 }],
+    "prettier/prettier": [
+      "error",
+      {
+        printWidth: 180,
+      },
+    ],
   },
 };
 

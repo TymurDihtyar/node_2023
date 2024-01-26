@@ -1,9 +1,9 @@
 import * as jwt from "jsonwebtoken";
 
-import {configs} from "../configs/config";
-import {EActionTockenType} from "../enums/token-type.enum";
-import {ApiError} from "../errors/api.error";
-import {ITokenPair, ITokenPayload} from "../interface/token.interface";
+import { configs } from "../configs/config";
+import { EActionTockenType } from "../enums/token-type.enum";
+import { ApiError } from "../errors/api.error";
+import { ITokenPair, ITokenPayload } from "../interface/token.interface";
 
 class TokenService {
   public generateTokenPair(payload: ITokenPayload): ITokenPair {
@@ -54,7 +54,7 @@ class TokenService {
     }
   }
 
-  public createActionToken(payload: ITokenPayload, tokenType: EActionTockenType,) {
+  public createActionToken(payload: ITokenPayload, tokenType: EActionTockenType) {
     let secret: string;
 
     switch (tokenType) {

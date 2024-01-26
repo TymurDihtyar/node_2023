@@ -34,8 +34,8 @@ class AuthService {
     const user = await userRepository.create({ ...dto, password: hashedPassword });
 
     const actionToken = tokenService.createActionToken({ userId: user._id }, EActionTockenType.VERIFY);
-    await tokenRepository.createActionToken({actionToken, _userId: user._id, tokenType: EActionTockenType.VERIFY});
-    await emailService.sendMail(user.email, EEmailAction.VERIFY, {name: user.name, actionToken,});
+    await tokenRepository.createActionToken({ actionToken, _userId: user._id, tokenType: EActionTockenType.VERIFY });
+    await emailService.sendMail(user.email, EEmailAction.VERIFY, { name: user.name, actionToken });
 
     return user;
   }
@@ -49,7 +49,7 @@ class AuthService {
 
     tokenService.checkActionToken(actionToken, EActionTockenType.VERIFY);
 
-    const entity = await tokenRepository.getActionTokenByParams({actionToken});
+    const entity = await tokenRepository.getActionTokenByParams({ actionToken });
     if (!entity) throw new ApiError("Not valid token", 400);
 
     await userRepository.updateMe(user._id, { verify: true });
@@ -60,7 +60,7 @@ class AuthService {
     return jwtTokens;
   }
 
-  public async refresh(jwtPayload: ITokenPayload, refreshToken: string,): Promise<ITokenPair> {
+  public async refresh(jwtPayload: ITokenPayload, refreshToken: string): Promise<ITokenPair> {
     await tokenRepository.deleteTokenByParams({ refreshToken });
 
     const jwtTokens = tokenService.generateTokenPair({
@@ -79,15 +79,15 @@ class AuthService {
     const actionToken = tokenService.createActionToken({ userId: user._id }, EActionTockenType.FORGOT);
 
     await Promise.all([
-      tokenRepository.createActionToken({actionToken, _userId: user._id, tokenType: EActionTockenType.FORGOT}),
-      emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, {actionToken}),
+      tokenRepository.createActionToken({ actionToken, _userId: user._id, tokenType: EActionTockenType.FORGOT }),
+      emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, { actionToken }),
     ]);
   }
 
   public async setForgotPassword(password: string, actionToken: string) {
-    const payload = tokenService.checkActionToken(actionToken, EActionTockenType.FORGOT,);
+    const payload = tokenService.checkActionToken(actionToken, EActionTockenType.FORGOT);
 
-    const entity = await tokenRepository.getActionTokenByParams({actionToken});
+    const entity = await tokenRepository.getActionTokenByParams({ actionToken });
     if (!entity) {
       throw new ApiError("Not valid token", 400);
     }
