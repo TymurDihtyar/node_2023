@@ -34,6 +34,8 @@ class EmailService {
 
   public async sendMail(email: string | string[], emailAction: EEmailAction, context: Record<string, string | number> = {}) {
     const { subject, templateName } = emailTemplate[emailAction];
+
+    context.frontUrl = configs.FRONT_URL;
     const mailOptions = {
       to: email,
       subject,
