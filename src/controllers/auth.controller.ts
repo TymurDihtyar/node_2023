@@ -19,8 +19,10 @@ class AuthController {
 
   public async singIn(req: Request, res: Response, next: NextFunction) {
     try {
+      const token = req.params.token;
       const body = req.body as ILogin;
-      const jwtTokens = await authService.singIn(body);
+
+      const jwtTokens = await authService.singIn(body, token);
 
       return res.json({ data: jwtTokens });
     } catch (e) {

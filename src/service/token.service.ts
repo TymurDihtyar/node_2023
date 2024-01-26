@@ -44,6 +44,9 @@ class TokenService {
         case EActionTockenType.FORGOT:
           secret = configs.JWT_FORGOT_ACTION_SECRET;
           break;
+        case EActionTockenType.VERIFY:
+          secret = configs.JWT_VERIFY_ACTION_SECRET;
+          break;
       }
       return jwt.verify(actionToken, secret) as ITokenPayload;
     } catch (e) {
@@ -57,6 +60,9 @@ class TokenService {
     switch (tokenType) {
       case EActionTockenType.FORGOT:
         secret = configs.JWT_FORGOT_ACTION_SECRET;
+        break;
+      case EActionTockenType.VERIFY:
+        secret = configs.JWT_VERIFY_ACTION_SECRET;
         break;
     }
     return jwt.sign(payload, secret, {

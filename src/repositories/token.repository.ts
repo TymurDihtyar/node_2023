@@ -17,11 +17,15 @@ class TokenRepository {
     await Token.deleteOne(params);
   }
 
-  public async createActionToken(data: Partial<IActionToken>){
+  public async deleteActionTokenByParams(params: FilterQuery<IActionToken>): Promise<void> {
+    await Token.deleteOne(params);
+  }
+
+  public async createActionToken(data: Partial<IActionToken>) {
     return await ActionToken.create(data);
   }
 
-  public async getActionTokenByParams(params: Partial<IActionToken>){
+  public async getActionTokenByParams(params: Partial<IActionToken>) {
     return await ActionToken.findOne(params);
   }
 }

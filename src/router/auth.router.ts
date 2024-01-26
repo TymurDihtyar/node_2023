@@ -10,7 +10,7 @@ const router = Router();
 
 router.post("/sign-up", commonMiddleware.isBodyValid(UserValidator.create), authController.singUp);
 
-router.post("/sign-in", commonMiddleware.isBodyValid(UserValidator.login), authController.singIn);
+router.post("/sign-in/:token", commonMiddleware.isBodyValid(UserValidator.login), authController.singIn);
 
 router.post("/refresh", authMiddleware.checkRefreshToken, authController.refresh);
 
