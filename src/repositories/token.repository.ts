@@ -13,6 +13,10 @@ class TokenRepository {
     return await Token.findOne(params);
   }
 
+  public async deleteManyBy(userId: string): Promise<void> {
+    await Token.deleteMany({ _userId: userId });
+  }
+
   public async deleteTokenByParams(params: FilterQuery<IToken>): Promise<void> {
     await Token.deleteOne(params);
   }
@@ -23,6 +27,10 @@ class TokenRepository {
 
   public async getActionTokenByParams(params: Partial<IActionToken>) {
     return await ActionToken.findOne(params);
+  }
+
+  public async deleteActionTokenByParams(params: Partial<IActionToken>): Promise<void> {
+    await Token.deleteOne(params);
   }
 }
 

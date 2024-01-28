@@ -39,6 +39,8 @@ class AuthService {
     const isMatch = await passwordService.compare(dto.password, user.password);
     if (!isMatch) throw new ApiError("Not valid email of password", 401);
 
+    if (!user.isVerified) throw new ApiError("Verify your account", 403);
+
     const jwtTokens = tokenService.generateTokenPair({ userId: user._id });
     await tokenRepository.create({ ...jwtTokens, _userId: user._id });
 
@@ -80,7 +82,7 @@ class AuthService {
 
     await Promise.all([
       userRepository.updateMe(payload.userId, { password: newHashedPassword }),
-      tokenRepository.deleteTokenByParams({ actionToken })
+      tokenRepository.deleteActionTokenByParams({ actionToken })
     ]);
   }
 
@@ -94,7 +96,7 @@ class AuthService {
 
     await Promise.all([
       userRepository.updateMe(payload.userId, { isVerified: true }),
-      tokenRepository.deleteTokenByParams({ actionToken })
+      tokenRepository.deleteActionTokenByParams({ actionToken })
     ]);
   }
 }

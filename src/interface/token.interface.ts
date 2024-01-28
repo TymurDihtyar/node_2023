@@ -1,5 +1,6 @@
 import { Types } from "mongoose";
-import {EActionTockenType} from "../enums/token-type.enum";
+
+import { EActionTockenType } from "../enums/token-type.enum";
 
 export interface ITokenPayload {
   userId: string;

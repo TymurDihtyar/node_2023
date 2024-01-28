@@ -52,7 +52,7 @@ class TokenService {
       }
       return jwt.verify(actionToken, secret) as ITokenPayload;
     } catch (e) {
-      throw new ApiError("Token not valid", 401);
+      throw new ApiError("Token not !!!!!!!!!valid", 401);
     }
   }
 
