@@ -18,4 +18,6 @@ router.post("/forgot-password", commonMiddleware.isBodyValid(UserValidator.forgo
 
 router.put("/forgot-password/:token", commonMiddleware.isBodyValid(UserValidator.setForgotPassword), authController.setForgotPassword);
 
+router.put("/verify/:token", authController.verify);
+
 export const authRouter = router;

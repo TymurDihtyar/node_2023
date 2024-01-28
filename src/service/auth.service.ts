@@ -14,28 +14,22 @@ import { tokenService } from "./token.service";
 
 class AuthService {
   public async singUp(dto: Partial<IUser>): Promise<IUser> {
-    const userFromDb = await userRepository.getOneByParams({
-      email: dto.email,
-    });
+    const userFromDb = await userRepository.getOneByParams({ email: dto.email });
     if (userFromDb) {
       throw new ApiError("User with provided email already exist", 400);
     }
     const hashedPassword = await passwordService.hash(dto.password);
 
-    // const users = await userRepository.getAll();
-    // await Promise.all(
-    //   users.map(async (user) => {
-    //     await emailService.sendMail(user.email, EEmailAction.WELCOME, {
-    //       name: user.name,
-    //     });
-    //   }),
-    // );
+    const user = await userRepository.create({ ...dto, password: hashedPassword });
 
-    await emailService.sendMail(dto.email, EEmailAction.WELCOME, {
-      name: dto.name,
-    });
+    const actionToken = tokenService.createActionToken({ userId: user._id }, EActionTockenType.ACTIVATE);
 
-    return await userRepository.create({ ...dto, password: hashedPassword });
+    await Promise.all([
+      tokenRepository.createActionToken({ actionToken, _userId: user._id, tokenType: EActionTockenType.ACTIVATE }),
+      emailService.sendMail(dto.email, EEmailAction.WELCOME, { actionToken, name: dto.name }),
+    ]);
+
+    return user;
   }
 
   public async singIn(dto: ILogin): Promise<ITokenPair> {
@@ -67,32 +61,50 @@ class AuthService {
 
   public async forgotPassword(user: IUser) {
     const actionToken = tokenService.createActionToken({ userId: user._id }, EActionTockenType.FORGOT);
+
     await Promise.all([
-      tokenRepository.createActionToken({
-        actionToken,
-        _userId: user._id,
-        tokenType: EActionTockenType.FORGOT,
-      }),
-      emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, {
-        actionToken,
-      }),
+      tokenRepository.createActionToken({ actionToken, _userId: user._id, tokenType: EActionTockenType.FORGOT }),
+      emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, { actionToken }),
     ]);
   }
 
   public async setForgotPassword(password: string, actionToken: string) {
     const payload = tokenService.checkActionToken(actionToken, EActionTockenType.FORGOT);
-    const entity = await tokenRepository.getActionTokenByParams({
-      actionToken,
-    });
+
+    const entity = await tokenRepository.getActionTokenByParams({ actionToken });
     if (!entity) {
       throw new ApiError("Not valid token", 400);
     }
 
     const newHashedPassword = await passwordService.hash(password);
 
-    await userRepository.updateMe(payload.userId, {
-      password: newHashedPassword,
-    });
+    await Promise.all([
+      userRepository.updateMe(payload.userId, { password: newHashedPassword }),
+      tokenRepository.deleteTokenByParams({ actionToken })
+    ]);
+  }
+
+  public async verify(actionToken: string) {
+    const payload = tokenService.checkActionToken(actionToken, EActionTockenType.ACTIVATE);
+
+    const entity = await tokenRepository.getActionTokenByParams({ actionToken });
+    if (!entity) {
+      throw new ApiError("Not valid token", 400);
+    }
+
+    await Promise.all([
+      userRepository.updateMe(payload.userId, { isVerified: true }),
+      tokenRepository.deleteTokenByParams({ actionToken })
+    ]);
   }
 }
 export const authService = new AuthService();
+
+// const users = await userRepository.getAll();
+// await Promise.all(
+//   users.map(async (user) => {
+//     await emailService.sendMail(user.email, EEmailAction.WELCOME, {
+//       name: user.name,
+//     });
+//   }),
+// );

@@ -44,6 +44,11 @@ class TokenService {
         case EActionTockenType.FORGOT:
           secret = configs.JWT_FORGOT_ACTION_SECRET;
           break;
+        case EActionTockenType.ACTIVATE:
+          secret = configs.JWT_ACTIVATE_ACTION_SECRET;
+          break;
+        default:
+          throw new ApiError("checkActionToken", 500);
       }
       return jwt.verify(actionToken, secret) as ITokenPayload;
     } catch (e) {
@@ -58,6 +63,11 @@ class TokenService {
       case EActionTockenType.FORGOT:
         secret = configs.JWT_FORGOT_ACTION_SECRET;
         break;
+      case EActionTockenType.ACTIVATE:
+        secret = configs.JWT_ACTIVATE_ACTION_SECRET;
+        break;
+      default:
+        throw new ApiError("createActionToken", 500);
     }
     return jwt.sign(payload, secret, {
       expiresIn: configs.JWT_ACTION_EXPIRES_IN,
