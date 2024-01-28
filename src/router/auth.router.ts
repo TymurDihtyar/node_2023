@@ -3,8 +3,8 @@ import { Router } from "express";
 import { authController } from "../controllers/auth.controller";
 import { authMiddleware } from "../middlewares/auth.middleware";
 import { commonMiddleware } from "../middlewares/common.middleware";
-import { UserValidator } from "../validator/user.validator";
 import { userMiddleware } from "../middlewares/user.middleware";
+import { UserValidator } from "../validator/user.validator";
 
 const router = Router();
 

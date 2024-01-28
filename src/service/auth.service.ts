@@ -1,16 +1,16 @@
-import {Types} from "mongoose";
+import { Types } from "mongoose";
 
-import {EEmailAction} from "../enums/email-action.enum";
-import {EActionTockenType} from "../enums/token-type.enum";
-import {ApiError} from "../errors/api.error";
-import {ILogin} from "../interface/auth.interface";
-import {ITokenPair, ITokenPayload} from "../interface/token.interface";
-import {IUser} from "../interface/user.interface";
-import {tokenRepository} from "../repositories/token.repository";
-import {userRepository} from "../repositories/user.repository";
-import {emailService} from "./email.service";
-import {passwordService} from "./password.service";
-import {tokenService} from "./token.service";
+import { EEmailAction } from "../enums/email-action.enum";
+import { EActionTockenType } from "../enums/token-type.enum";
+import { ApiError } from "../errors/api.error";
+import { ILogin } from "../interface/auth.interface";
+import { ITokenPair, ITokenPayload } from "../interface/token.interface";
+import { IUser } from "../interface/user.interface";
+import { tokenRepository } from "../repositories/token.repository";
+import { userRepository } from "../repositories/user.repository";
+import { emailService } from "./email.service";
+import { passwordService } from "./password.service";
+import { tokenService } from "./token.service";
 
 class AuthService {
   public async singUp(dto: Partial<IUser>): Promise<IUser> {
@@ -51,36 +51,48 @@ class AuthService {
     return jwtTokens;
   }
 
-  public async refresh(jwtPayload: ITokenPayload, refreshToken: string,): Promise<ITokenPair> {
+  public async refresh(jwtPayload: ITokenPayload, refreshToken: string): Promise<ITokenPair> {
     await tokenRepository.deleteTokenByParams({ refreshToken });
 
     const jwtTokens = tokenService.generateTokenPair({
       userId: jwtPayload.userId,
     });
 
-    await tokenRepository.create({...jwtTokens, _userId: new Types.ObjectId(jwtPayload.userId)});
+    await tokenRepository.create({
+      ...jwtTokens,
+      _userId: new Types.ObjectId(jwtPayload.userId),
+    });
     return jwtTokens;
   }
 
   public async forgotPassword(user: IUser) {
     const actionToken = tokenService.createActionToken({ userId: user._id }, EActionTockenType.FORGOT);
     await Promise.all([
-      tokenRepository.createActionToken({actionToken, _userId: user._id, tokenType: EActionTockenType.FORGOT,
+      tokenRepository.createActionToken({
+        actionToken,
+        _userId: user._id,
+        tokenType: EActionTockenType.FORGOT,
       }),
-      emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, { actionToken }),
+      emailService.sendMail(user.email, EEmailAction.FORGOT_PASSWORD, {
+        actionToken,
+      }),
     ]);
   }
 
-  public async setForgotPassword(password: string, actionToken: string){
+  public async setForgotPassword(password: string, actionToken: string) {
     const payload = tokenService.checkActionToken(actionToken, EActionTockenType.FORGOT);
-    const entity = await tokenRepository.getActionTokenByParams({ actionToken });
+    const entity = await tokenRepository.getActionTokenByParams({
+      actionToken,
+    });
     if (!entity) {
       throw new ApiError("Not valid token", 400);
     }
 
     const newHashedPassword = await passwordService.hash(password);
 
-    await userRepository.updateMe(payload.userId, { password: newHashedPassword })
+    await userRepository.updateMe(payload.userId, {
+      password: newHashedPassword,
+    });
   }
 }
 export const authService = new AuthService();

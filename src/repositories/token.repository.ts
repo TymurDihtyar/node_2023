@@ -1,8 +1,8 @@
 import { FilterQuery } from "mongoose";
 
 import { IActionToken, IToken } from "../interface/token.interface";
+import { ActionToken } from "../models/action.model";
 import { Token } from "../models/token.model";
-import {ActionToken} from "../models/action.model";
 
 class TokenRepository {
   public async create(data: Partial<IToken>) {
@@ -17,11 +17,11 @@ class TokenRepository {
     await Token.deleteOne(params);
   }
 
-  public async createActionToken(data: Partial<IActionToken>){
+  public async createActionToken(data: Partial<IActionToken>) {
     return await ActionToken.create(data);
   }
 
-  public async getActionTokenByParams(params: Partial<IActionToken>){
+  public async getActionTokenByParams(params: Partial<IActionToken>) {
     return await ActionToken.findOne(params);
   }
 }
