@@ -30,7 +30,7 @@ class TokenRepository {
   }
 
   public async deleteActionTokenByParams(params: Partial<IActionToken>): Promise<void> {
-    await Token.deleteOne(params);
+    await ActionToken.deleteOne(params);
   }
 }
 
