@@ -9,7 +9,6 @@ dayjs.extend(utc);
 
 const removeOldTokens = async function () {
   try {
-    console.log("cron is running");
     const previousMonth = dayjs().utc().subtract(30, "d");
 
     await tokenRepository.deleteManyByParams({ createdAt: { $lte: previousMonth } });
