@@ -5,11 +5,7 @@ import { tokenRepository } from "../repositories/token.repository";
 import { tokenService } from "../service/token.service";
 
 class AuthMiddleware {
-  public async checkAccessToken(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
+  public async checkAccessToken(req: Request, res: Response, next: NextFunction) {
     try {
       const tokenString = req.get("Authorization");
       if (!tokenString) throw new ApiError("No token", 401);
@@ -27,11 +23,7 @@ class AuthMiddleware {
     }
   }
 
-  public async checkRefreshToken(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) {
+  public async checkRefreshToken(req: Request, res: Response, next: NextFunction) {
     try {
       const tokenString = req.get("Authorization");
       if (!tokenString) throw new ApiError("No token", 401);

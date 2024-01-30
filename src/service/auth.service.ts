@@ -5,7 +5,7 @@ import { EActionTockenType } from "../enums/token-type.enum";
 import { ApiError } from "../errors/api.error";
 import { ILogin } from "../interface/auth.interface";
 import { ITokenPair, ITokenPayload } from "../interface/token.interface";
-import { IUser } from "../interface/user.interface";
+import { IChangePassword, IUser } from "../interface/user.interface";
 import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
 import { emailService } from "./email.service";
@@ -99,6 +99,21 @@ class AuthService {
       tokenRepository.deleteActionTokenByParams({ actionToken })
     ]);
   }
+
+  public changePassword = async (dto: IChangePassword, jwtPayload: ITokenPayload) => {
+    const user = await userRepository.getById(jwtPayload.userId);
+    if (!user) {
+      throw new ApiError("User not found", 404);
+    }
+
+    const isMatch = await passwordService.compare(dto.oldPassword, user.password);
+    if (!isMatch) {
+      throw new ApiError("Old password is invalid", 400);
+    }
+
+    const hashedNewPassword = await passwordService.hash(dto.newPassword);
+    await userRepository.updateMe(user._id, { password: hashedNewPassword });
+  };
 }
 export const authService = new AuthService();
 

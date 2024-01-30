@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { ILogin } from "../interface/auth.interface";
 import { ITokenPayload } from "../interface/token.interface";
-import { IUser } from "../interface/user.interface";
+import { IChangePassword, IUser } from "../interface/user.interface";
 import { authService } from "../service/auth.service";
 
 class AuthController {
@@ -46,7 +46,7 @@ class AuthController {
       const user = res.locals as IUser;
 
       await authService.forgotPassword(user);
-      return res.json("OK");
+      return res.sendStatus(204);
     } catch (e) {
       next(e);
     }
@@ -58,7 +58,7 @@ class AuthController {
       const { newPassword } = req.body;
 
       await authService.setForgotPassword(newPassword, token);
-      return res.json("OK");
+      return res.sendStatus(204);
     } catch (e) {
       next(e);
     }
@@ -69,7 +69,19 @@ class AuthController {
       const token = req.params.token;
 
       await authService.verify(token);
-      return res.json("OK");
+      return res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+      const jwtPayload = res.locals.jwtPayload as ITokenPayload;
+      const body = req.body as IChangePassword;
+      await authService.changePassword(body, jwtPayload);
+
+      return res.sendStatus(204);
     } catch (e) {
       next(e);
     }

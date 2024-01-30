@@ -7,3 +7,8 @@ export interface IUser extends Document {
   password: string;
   isVerified: boolean;
 }
+
+export interface IChangePassword {
+  oldPassword: string;
+  newPassword: string;
+}
