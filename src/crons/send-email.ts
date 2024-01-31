@@ -8,7 +8,6 @@ import { tokenRepository } from "../repositories/token.repository";
 import { userRepository } from "../repositories/user.repository";
 import { emailService } from "../service/email.service";
 
-
 dayjs.extend(utc);
 
 const sendRememberEmail = async function () {
