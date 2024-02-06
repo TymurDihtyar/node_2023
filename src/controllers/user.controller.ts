@@ -1,14 +1,26 @@
 import { NextFunction, Request, Response } from "express";
 
+import { IQuery } from "../interface/pagitation.interface";
 import { ITokenPayload } from "../interface/token.interface";
+import { UserPresenter } from "../presenter/user.presenter";
 import { userService } from "../service/user.service";
-import {UserPresenter} from "../presenter/user.presenter";
 
 class UserController {
   public async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const users = await userService.getAll();
       return res.json(users);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async getAllPaginated(req: Request, res: Response, next: NextFunction) {
+    try {
+      const userPaginated = await userService.getMany(req.query as IQuery);
+      const presentedUsers = userPaginated.data.map((user) => UserPresenter.userToResponse(user));
+
+      return res.json({ ...userPaginated, data: presentedUsers });
     } catch (e) {
       next(e);
     }

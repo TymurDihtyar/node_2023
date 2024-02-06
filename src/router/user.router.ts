@@ -7,7 +7,7 @@ import { UserValidator } from "../validator/user.validator";
 
 const router = Router();
 
-router.get("/", userController.getAll);
+router.get("/", userController.getAllPaginated);
 
 router.get("/me", authMiddleware.checkAccessToken, userController.getMe);
 router.put("/me", commonMiddleware.isBodyValid(UserValidator.update), authMiddleware.checkAccessToken, userController.updateMe);
