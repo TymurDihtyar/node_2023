@@ -17,6 +17,10 @@ class UserRepository {
     return await User.findOne(params);
   }
 
+  public async getOneByParamsWithPassword(params: FilterQuery<IUser>): Promise<IUser> {
+    return await User.findOne(params).select("+password");
+  }
+
   public async create(body: Partial<IUser>): Promise<IUser> {
     return await User.create(body);
   }
@@ -35,10 +39,7 @@ class UserRepository {
         $lookup: {
           from: Token.collection.name,
           let: { userId: "$_id" },
-          pipeline: [
-            {$match: { $expr: {$eq:[ '$_userId', '$$userId']} }},
-            {$match: { createdAt: { $gt: date } }},
-          ],
+          pipeline: [{ $match: { $expr: { $eq: ["$_userId", "$$userId"] } } }, { $match: { createdAt: { $gt: date } } }],
           as: "tokens",
         },
       },

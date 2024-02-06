@@ -6,6 +6,7 @@ export interface IUser extends Document {
   age: number;
   password: string;
   isVerified: boolean;
+  createdAt: Date;
 }
 
 export interface IChangePassword {

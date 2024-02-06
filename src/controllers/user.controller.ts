@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 
 import { ITokenPayload } from "../interface/token.interface";
 import { userService } from "../service/user.service";
+import {UserPresenter} from "../presenter/user.presenter";
 
 class UserController {
   public async getAll(req: Request, res: Response, next: NextFunction) {
@@ -29,7 +30,7 @@ class UserController {
       const jwtPayload = res.locals.jwtPayload as ITokenPayload;
       const user = await userService.getMe(jwtPayload);
 
-      return res.json(user);
+      return res.json({ data: UserPresenter.userToResponse(user) });
     } catch (e) {
       next(e);
     }

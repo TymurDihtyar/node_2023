@@ -33,7 +33,7 @@ class AuthService {
   }
 
   public async singIn(dto: ILogin): Promise<ITokenPair> {
-    const user = await userRepository.getOneByParams({ email: dto.email });
+    const user = await userRepository.getOneByParamsWithPassword({ email: dto.email });
     if (!user) throw new ApiError("Not valid email of password", 401);
 
     const isMatch = await passwordService.compare(dto.password, user.password);
