@@ -1,11 +1,13 @@
 import express, { NextFunction, Request, Response } from "express";
 import * as mongoose from "mongoose";
+import * as swaggerUi from "swagger-ui-express";
 
 import { configs } from "./configs/config";
 import { runAllCronJobs } from "./crons";
 import { ApiError } from "./errors/api.error";
 import { authRouter } from "./router/auth.router";
 import { userRouter } from "./router/user.router";
+import * as swaggerDocument from "./utils/swagger.json";
 
 const app = express();
 
@@ -14,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("*", (err: ApiError, req: Request, res: Response, next: NextFunction) => {
   return res.status(err?.status || 500).json({
