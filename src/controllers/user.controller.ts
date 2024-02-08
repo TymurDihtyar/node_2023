@@ -1,10 +1,10 @@
 import { NextFunction, Request, Response } from "express";
+import { UploadedFile } from "express-fileupload";
 
 import { IQuery } from "../interface/pagitation.interface";
 import { ITokenPayload } from "../interface/token.interface";
 import { UserPresenter } from "../presenter/user.presenter";
 import { userService } from "../service/user.service";
-import {UploadedFile} from "express-fileupload";
 
 class UserController {
   public async getAll(req: Request, res: Response, next: NextFunction) {
@@ -77,9 +77,10 @@ class UserController {
 
   public async uploadAvatar(req: Request, res: Response, next: NextFunction) {
     try {
-      const { userId } = req.params;
+      const jwtPayload = res.locals.jwtPayload as ITokenPayload;
+
       const avatar = req.files.avatar;
-      await userService.uploadAvatar(userId, avatar as UploadedFile);
+      await userService.uploadAvatar(jwtPayload, avatar as UploadedFile);
 
       return res.json("ok");
     } catch (e) {

@@ -16,6 +16,6 @@ router.delete("/me", authMiddleware.checkAccessToken, userController.deleteMe);
 
 router.get("/:id", commonMiddleware.isValidId, userController.getById);
 
-router.post("/:userId/avatar", fileMiddleware.isAvatarValid, userController.uploadAvatar);
+router.post("/avatar", authMiddleware.checkAccessToken, fileMiddleware.isAvatarValid, userController.uploadAvatar);
 
 export const userRouter = router;

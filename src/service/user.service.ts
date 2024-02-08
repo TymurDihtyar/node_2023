@@ -52,14 +52,18 @@ class UserService {
     return await userRepository.getMany(queryObject);
   }
 
-  public async uploadAvatar(userId: string, avatar: UploadedFile) {
-    const user = await userRepository.getById(userId);
+  public async uploadAvatar(jwtPayload: ITokenPayload, avatar: UploadedFile) {
+    const user = await userRepository.getById(jwtPayload.userId);
     if (!user) {
       throw new ApiError("user not found", 403);
     }
-    const filePath = await s3Service.uploadFile(avatar, EFileType.Users, userId);
+    if (user.avatar) {
+      await s3Service.deleteFile(user.avatar);
+    }
 
-    await userRepository.updateMe(userId, { avatar: filePath });
+    const filePath = await s3Service.uploadFile(avatar, EFileType.Users, jwtPayload.userId);
+
+    await userRepository.updateMe(jwtPayload.userId, { avatar: filePath });
   }
 }
 export const userService = new UserService();

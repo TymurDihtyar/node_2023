@@ -1,4 +1,4 @@
-import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { DeleteObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import * as crypto from "crypto";
 import { UploadedFile } from "express-fileupload";
 import * as path from "path";
@@ -19,7 +19,6 @@ class S3Service {
 
   public async uploadFile(file: UploadedFile, itemType: EFileType, itemId: string) {
     const filePath = this.buildFilePath(itemType, itemId, file.name);
-
     await this.myClient.send(
       new PutObjectCommand({
         Key: filePath,
@@ -31,6 +30,15 @@ class S3Service {
     );
 
     return filePath;
+  }
+
+  public async deleteFile(prevAvatar: string) {
+    await this.myClient.send(
+      new DeleteObjectCommand({
+        Key: prevAvatar,
+        Bucket: configs.AWS_S3_BUCKET_NAME,
+      }),
+    );
   }
 
   private buildFilePath(itemType: EFileType, itemId: string, fileName: string) {
