@@ -1,3 +1,4 @@
+import { configs } from "../configs/config";
 import { IUser } from "../interface/user.interface";
 
 export class UserPresenter {
@@ -8,6 +9,7 @@ export class UserPresenter {
       age: user.age,
       isVerified: user.isVerified,
       createdAt: user.createdAt,
+      avatar: user?.avatar ? `${configs.AWS_S3_URL}${user?.avatar}` : null,
     };
   }
 }

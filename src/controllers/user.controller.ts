@@ -4,6 +4,7 @@ import { IQuery } from "../interface/pagitation.interface";
 import { ITokenPayload } from "../interface/token.interface";
 import { UserPresenter } from "../presenter/user.presenter";
 import { userService } from "../service/user.service";
+import {UploadedFile} from "express-fileupload";
 
 class UserController {
   public async getAll(req: Request, res: Response, next: NextFunction) {
@@ -69,6 +70,18 @@ class UserController {
       const user = await userService.updateMe(jwtPayload, body);
 
       return res.json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  public async uploadAvatar(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { userId } = req.params;
+      const avatar = req.files.avatar;
+      await userService.uploadAvatar(userId, avatar as UploadedFile);
+
+      return res.json("ok");
     } catch (e) {
       next(e);
     }

@@ -7,6 +7,7 @@ export interface IUser extends Document {
   password: string;
   isVerified: boolean;
   createdAt: Date;
+  avatar: string;
 }
 
 export interface IChangePassword {
