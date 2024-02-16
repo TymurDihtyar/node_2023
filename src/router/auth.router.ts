@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import { authController } from "../controllers/auth.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
-import { commonMiddleware } from "../middlewares/common.middleware";
-import { userMiddleware } from "../middlewares/user.middleware";
-import { UserValidator } from "../validator/user.validator";
+import { authController } from "../../../node_2023/src/controllers/auth.controller";
+import { authMiddleware } from "../../../node_2023/src/middlewares/auth.middleware";
+import { commonMiddleware } from "../../../node_2023/src/middlewares/common.middleware";
+import { userMiddleware } from "../../../node_2023/src/middlewares/user.middleware";
+import { UserValidator } from "../../../node_2023/src/validator/user.validator";
 
 const router = Router();
 

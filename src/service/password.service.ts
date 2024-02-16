@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 
-import { configs } from "../configs/config";
+import { configs } from "../../../weatherAPI/src/configs/config";
 class PasswordService {
   public hash(password: string): Promise<string> {
     return bcrypt.hash(password, configs.SECRET_SALT);

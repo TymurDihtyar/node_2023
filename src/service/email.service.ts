@@ -2,7 +2,7 @@ import nodemailer, { Transporter } from "nodemailer";
 import hbs from "nodemailer-express-handlebars";
 import * as path from "path";
 
-import { configs } from "../configs/config";
+import { configs } from "../../../weatherAPI/src/configs/config";
 import { emailTemplate } from "../constants/email.constant";
 import { EEmailAction } from "../enums/email-action.enum";
 class EmailService {

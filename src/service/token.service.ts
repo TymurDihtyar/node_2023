@@ -1,6 +1,6 @@
 import * as jwt from "jsonwebtoken";
 
-import { configs } from "../configs/config";
+import { configs } from "../../../weatherAPI/src/configs/config";
 import { EActionTockenType } from "../enums/token-type.enum";
 import { ApiError } from "../errors/api.error";
 import { ITokenPair, ITokenPayload } from "../interface/token.interface";

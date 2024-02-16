@@ -3,10 +3,10 @@ import fileUpload from "express-fileupload";
 import * as mongoose from "mongoose";
 import * as swaggerUi from "swagger-ui-express";
 
-import { configs } from "./configs/config";
+import { configs } from "../../weatherAPI/src/configs/config";
 import { runAllCronJobs } from "./crons";
 import { ApiError } from "./errors/api.error";
-import { authRouter } from "./router/auth.router";
+import { authRouter } from "../../weatherAPI/src/router/auth.router";
 import { userRouter } from "./router/user.router";
 import * as swaggerDocument from "./utils/swagger.json";
 

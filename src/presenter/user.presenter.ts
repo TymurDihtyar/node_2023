@@ -1,4 +1,4 @@
-import { configs } from "../configs/config";
+import { configs } from "../../../weatherAPI/src/configs/config";
 import { IUser } from "../interface/user.interface";
 
 export class UserPresenter {

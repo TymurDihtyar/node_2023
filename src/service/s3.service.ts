@@ -3,7 +3,7 @@ import * as crypto from "crypto";
 import { UploadedFile } from "express-fileupload";
 import * as path from "path";
 
-import { configs } from "../configs/config";
+import { configs } from "../../../weatherAPI/src/configs/config";
 import { EFileType } from "../enums/file-type";
 
 class S3Service {
